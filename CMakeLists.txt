@@ -8,12 +8,18 @@ set(CMAKE_CXX_EXTENSIONS OFF)       # 是否允许编译器特有的扩展，设
 
 # http_request_parser 静态库模块
 add_library(http_request_parser 
-    STATIC src/http_request_parser.cpp
+STATIC 
+    include/LynxHTTP/http_request_parser.hpp    
+    src/http_request_parser.cpp
 )
 target_include_directories(http_request_parser 
-    PUBLIC include
+PUBLIC 
+    include
 )
 
 # main 可执行文件
 add_executable(main main.cpp)
-target_link_libraries(main PRIVATE http_request_parser)
+target_link_libraries(main 
+PRIVATE 
+    http_request_parser
+)
