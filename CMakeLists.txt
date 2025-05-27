@@ -33,4 +33,8 @@ add_executable(main main.cpp)
 target_link_libraries(main 
 PRIVATE 
     http
+    net
 )
+
+# tests-client 可执行文件
+add_executable(client tests/client.cpp)
