@@ -17,6 +17,17 @@ PUBLIC
     include
 )
 
+# net 静态库模块
+add_library(net
+STATIC 
+    include/LynxHTTP/net.hpp    
+    src/net.cpp
+)
+target_include_directories(net
+PUBLIC 
+    include
+)
+
 # main 可执行文件
 add_executable(main main.cpp)
 target_link_libraries(main 
