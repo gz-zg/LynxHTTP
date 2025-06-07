@@ -37,8 +37,3 @@ int TcpServer::accept(InetAddress* peer_addr) {
 int TcpServer::fd() {
     return sockfd_;
 }
-
-
-// ========================================
-// TcpConnection 类中函数的定义
-// ========================================

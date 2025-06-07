@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(LynxHTTP LANGUAGES CXX) # 表示只启用 C++ 编译器
+project(LynxHTTP LANGUAGES CXX)     # 表示只启用 C++ 编译器
 
 # 设置 C++ 的语言标准
 set(CMAKE_CXX_STANDARD 17)          # 指定 C++ 编译标准
@@ -13,17 +13,6 @@ STATIC
     src/http.cpp
 )
 target_include_directories(http 
-PUBLIC 
-    include
-)
-
-# net 静态库模块
-add_library(net
-STATIC 
-    include/LynxHTTP/net.hpp    
-    src/net.cpp
-)
-target_include_directories(net
 PUBLIC 
     include
 )
