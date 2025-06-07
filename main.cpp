@@ -35,8 +35,7 @@ void do_something(int connfd)
 
 int main() 
 {
-    Socket test_sock;
-    test_sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1);
+    TcpServer test_sock;
     InetAddress test_addr(1234);
     test_sock.bind(test_addr);
     test_sock.listen();
@@ -48,8 +47,8 @@ int main()
     {
         InetAddress peer_addr;
         int connfd = test_sock.accept(&peer_addr);
-        Socket peer_sockfd(connfd);
-        do_something(peer_sockfd.fd());
+        //TcpServer peer_sockfd(connfd);
+        //do_something(peer_sockfd.fd());
     }
     
 

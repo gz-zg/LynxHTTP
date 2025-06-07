@@ -9,137 +9,57 @@
 // ========================================
 // 所有类的“前向声明” (解决类的循环依赖问题)
 // ========================================
+
 class Socket;
 class InetAddress;
-// class Channel;
-// class EventLoop;
-// class Poller;
-// class Acceptor;
-// class Connection;
 
 
 // ========================================
-// Socket类的定义
+// InetAddress 类的定义
 // ========================================
-class Socket {
+
+class InetAddress {
 public:
-    Socket();
-    explicit Socket(int fd);  // explicit会禁止"隐式类型转换", 防止 int 被隐式转换为 Socket
-    ~Socket();
+    InetAddress();                              // 对 sockaddr_ 进行默认初始化
+    explicit InetAddress(uint16_t port);        // 将 sockaddr_ 初始化为 IPv4 + 0.0.0.0 + port
+    // explicit会禁止"隐式类型转换", 防止隐式转换: int -> uint16_t -> InetAddress 或 uint16_t -> InetAddress
 
-    void setsockopt(int level, int optname, int optval);
-    void bind(const InetAddress& addr);
-    void listen();
-    int accept(InetAddress* peer_addr);
-    // void set_non_blocking();
-    int fd() const;
-    void close();
+    sockaddr* ptr();                            // 返回 sockaddr_ 的 sockaddr*
+    const sockaddr* ptr_const() const;          // 返回 sockaddr_ 的 const sockaddr*
+    socklen_t size() const;                     // 返回 sockaddr_ 的 socklen_t
+
+private:
+    sockaddr_in sockaddr_;                      // IPv4 地址
+};
+
+
+// ========================================
+// TcpServer 类的定义
+// ========================================
+
+class TcpServer {
+public:
+    TcpServer();                                 // 创建一个 TCP + IPv4 的套接字 sockfd_
+    ~TcpServer();                                // 释放这个 TCP + IPv4 的套接字 sockfd_
+
+    void bind_listen(const InetAddress& addr);   // 给 sockfd_ 绑定到一个本地地址(IPv4 + 端口), 并监听来自客户端的 TCP + IPv4 的连接
+    int accept(InetAddress* peer_addr);          // 从监听套接字 sockfd_ 的监听队列中接收客户端的连接请求,返回与客户端通信的新套接字的文件描述符
+    int fd();                                    // 返回 sockfd_
+
+private:
+    int sockfd_;                                 // TCP 服务器的 套接字
+};
+
+
+// ========================================
+// TcpConnection 类的定义
+// ========================================
+
+class TcpConnection {
+public:
+    TcpConnection();                       
+    ~TcpConnection();                                       
 
 private:
     int sockfd_;
 };
-
-
-// ========================================
-// InetAddress类的定义
-// ========================================
-class InetAddress {
-public:
-    InetAddress();
-    explicit InetAddress(uint16_t port);
-
-    const sockaddr* sockaddr_ptr_const() const;
-    sockaddr* sockaddr_ptr();
-    socklen_t length() const;
-
-private:
-    sockaddr_in sockaddr_;
-};
-
-// // ========================================
-// // Channel类的定义
-// // ========================================
-// #include <sys/epoll.h>
-// #include <functional>
-
-// class Channel {
-// public:
-//     Channel(EventLoop* loop, int fd);
-//     void set_read_callback(std::function<void()> cb);
-//     void set_write_callback(std::function<void()> cb);
-//     void handle_event(uint32_t events);
-//     void enable_reading();
-//     int fd() const;
-//     uint32_t events() const;
-
-// private:
-//     EventLoop* loop_;
-//     int fd_;
-//     uint32_t events_;
-//     std::function<void()> read_callback_;
-//     std::function<void()> write_callback_;
-// };
-
-// // ========================================
-// // EventLoop类的定义
-// // ========================================
-// class EventLoop {
-// public:
-//     EventLoop();
-//     ~EventLoop();
-
-//     void loop();
-//     void update_channel(Channel* channel);
-
-// private:
-//     bool quit_;
-//     std::unique_ptr<Poller> poller_;
-// };
-
-// // ========================================
-// // Poller类的定义
-// // ========================================
-// class Poller {
-// public:
-//     Poller();
-//     ~Poller();
-
-//     std::vector<Channel*> poll(int timeout_ms);
-//     void update_channel(Channel* channel);
-
-// private:
-//     int epoll_fd_;
-//     std::unordered_map<int, Channel*> channels_;
-// };
-
-// // ========================================
-// // Acceptor类的定义
-// // ========================================
-// class Acceptor {
-// public:
-//     Acceptor(EventLoop* loop, const InetAddress& listen_addr);
-//     void set_new_conn_callback(std::function<void(int)> cb);
-//     void listen();
-
-// private:
-//     Socket listen_sock_;
-//     Channel channel_;
-//     std::function<void(int)> new_conn_cb_;
-// };
-
-// // ========================================
-// // Connection类的定义
-// // ========================================
-// class Connection {
-// public:
-//     Connection(EventLoop* loop, int sockfd);
-//     ~Connection();
-
-//     void handle_read();
-//     void handle_write();
-//     int fd() const;
-
-// private:
-//     Socket socket_;
-//     Channel channel_;
-// };
