@@ -19,10 +19,9 @@ PUBLIC
 
 # main 可执行文件
 add_executable(main main.cpp)
-target_link_libraries(main 
+target_link_libraries(main
 PRIVATE 
-    http
-    net
+    http  # 不管是PUBLIC链接还是PRIVATE链接，只要有一个目标链接了一个库，同一张链接网络上的所有目标是不是都能直接调用该库中内容？如果重复链接的库会不会去重？
 )
 
 # tests-client 可执行文件
