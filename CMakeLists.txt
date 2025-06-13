@@ -6,23 +6,24 @@ set(CMAKE_CXX_STANDARD 17)          # 指定 C++ 编译标准
 set(CMAKE_CXX_STANDARD_REQUIRED ON) # 要求强制使用所设定的标准，不能自动降级
 set(CMAKE_CXX_EXTENSIONS OFF)       # 是否允许编译器特有的扩展，设为 OFF 更可移植
 
-# http 静态库模块
-add_library(http
-STATIC 
-    include/LynxHTTP/http.hpp    
-    src/http.cpp
-)
-target_include_directories(http 
-PUBLIC 
-    include
-)
+# 定义所有静态库的名称
+set(libs EventLoop http InetAddress TcpConn TcpServer)
 
-# main 可执行文件
+# 循环创建所有静态库
+foreach(lib IN LISTS libs)
+    add_library(${lib}
+        STATIC
+            include/LynxHTTP/${lib}.hpp
+            src/${lib}.cpp
+    )
+    target_include_directories(${lib} PUBLIC include)
+endforeach()
+
+# 创建main可执行文件
 add_executable(main main.cpp)
-target_link_libraries(main
-PRIVATE 
-    http  # 不管是PUBLIC链接还是PRIVATE链接，只要有一个目标链接了一个库，同一张链接网络上的所有目标是不是都能直接调用该库中内容？如果重复链接的库会不会去重？
-)
+
+# 给main可执行文件链接静态库
+target_link_libraries(main PRIVATE ${libs})
 
 # tests-client 可执行文件
 add_executable(client tests/client.cpp)
