@@ -1,8 +1,11 @@
 #include "LynxHTTP/TcpServer.hpp"
+#include <cerrno>
+#include <memory>
 #include <sys/socket.h>
 #include <unistd.h>
 #include "LynxHTTP/InetAddress.hpp"
 #include <iostream>
+#include "LynxHTTP/TcpConn.hpp"
 
 // 创建一个 TCP + IPv4 的套接字 listen_fd_
 TcpServer::TcpServer()
@@ -41,18 +44,25 @@ void TcpServer::start(int port)
     // 将 listen_fd_ 添加到 事件循环 中
     evloop_.add_event(listen_fd_, EPOLLIN, &accept_handler_);
 
+    // 运行 evloop_ 这个事件循环
+    evloop_.run();
+
     std::cout << "Server started on port: " << port << std::endl;
 }
 
 void TcpServer::handle_accept()
 {
+    // 从监听套接字 listen_fd_ 的监听队列中接收客户端的连接请求,返回与客户端通信的新套接字的文件描述符
+    InetAddress addr;
+    socklen_t addr_len = sizeof(addr);
+    int conn_fd = ::accept4(listen_fd_, addr.ptr(), &addr_len, SOCK_NONBLOCK);
+    if(conn_fd == -1)
+    {
+        std::cerr << "accept4 error" << errno << std::endl;
+        return;
+    }
 
+    // 创建 TcpConn 对象
+    auto conn = std::make_shared<TcpConn>(conn_fd, evloop_);
+    
 }
-
-// // 从监听套接字 listen_fd_ 的监听队列中接收客户端的连接请求,返回与客户端通信的新套接字的文件描述符
-// int TcpServer::accept(InetAddress* peer_addr) 
-// {
-//     socklen_t peer_addr_len = peer_addr->size();
-//     int connfd = ::accept(listen_fd_, peer_addr->ptr(), &peer_addr_len); 
-//     return connfd;
-// }
