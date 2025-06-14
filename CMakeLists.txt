@@ -27,3 +27,6 @@ target_link_libraries(main PRIVATE ${libs})
 
 # tests-client 可执行文件
 add_executable(client tests/client.cpp)
+
+# tests-class 可执行文件
+add_executable(class tests/class.cpp)
