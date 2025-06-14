@@ -1,6 +1,7 @@
 #include "LynxHTTP/TcpServer.hpp"
 #include <cerrno>
 #include <memory>
+#include <sys/epoll.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include "LynxHTTP/InetAddress.hpp"
@@ -39,7 +40,7 @@ void TcpServer::start(int port)
     ::listen(listen_fd_, SOMAXCONN);
 
     // 给 listen_fd_ 封装一个函数作为回调函数
-    accept_handler_ = [this]()->void { this->handle_accept(); };
+    accept_handler_ = [this](uint32_t events)->void { this->handle_accept(events); };
     
     // 将 listen_fd_ 添加到 事件循环 中
     evloop_.add_event(listen_fd_, EPOLLIN, &accept_handler_);
@@ -50,19 +51,25 @@ void TcpServer::start(int port)
     std::cout << "Server started on port: " << port << std::endl;
 }
 
-void TcpServer::handle_accept()
+void TcpServer::handle_accept(uint32_t events)
 {
-    // 从监听套接字 listen_fd_ 的监听队列中接收客户端的连接请求,返回与客户端通信的新套接字的文件描述符
-    InetAddress addr;
-    socklen_t addr_len = sizeof(addr);
-    int conn_fd = ::accept4(listen_fd_, addr.ptr(), &addr_len, SOCK_NONBLOCK);
-    if(conn_fd == -1)
+    if(events | EPOLLIN)
     {
-        std::cerr << "accept4 error" << errno << std::endl;
-        return;
-    }
+        // 从监听套接字 listen_fd_ 的监听队列中接收客户端的连接请求,返回与客户端通信的新套接字的文件描述符
+        InetAddress addr;
+        socklen_t addr_len = sizeof(addr);
+        int conn_fd = ::accept4(listen_fd_, addr.ptr(), &addr_len, SOCK_NONBLOCK);
+        if(conn_fd == -1)
+        {
+            std::cerr << "accept4 error" << errno << std::endl;
+            return;
+        }
 
-    // 创建 TcpConn 对象
-    auto conn = std::make_shared<TcpConn>(conn_fd, evloop_);
-    
+        // 创建 TcpConn 对象
+        auto conn = std::make_shared<TcpConn>(conn_fd, evloop_);
+    }
+    else 
+    {
+        std::cerr << "handle_accept error" << std::endl;
+    }
 }

@@ -59,8 +59,8 @@ void EventLoop::run()
         {
             for(int i = 0; i < nev; i++)
             {
-                auto ev_handler = static_cast<std::function<void()>*>(events[i].data.ptr);
-                (*ev_handler)();
+                auto handler = static_cast<std::function<void(uint32_t)>*>(events[i].data.ptr);
+                (*handler)(events[i].events);
             }
         }
     }
