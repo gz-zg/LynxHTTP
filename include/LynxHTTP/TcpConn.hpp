@@ -12,6 +12,7 @@ public:
     ~TcpConn();
 
 private:
+    bool closed_;
     int conn_fd_;
     EventLoop& evloop_;
     std::function<void(uint32_t)> io_handler_;
