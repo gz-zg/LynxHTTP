@@ -20,6 +20,7 @@ TcpServer::~TcpServer()
     if(listen_fd_ != -1)
     {
         ::close(listen_fd_);
+        listen_fd_ = -1;
     }
 }
 

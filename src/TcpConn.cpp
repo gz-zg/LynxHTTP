@@ -41,6 +41,7 @@ void TcpConn::close()
     {
         evloop_.del_event(conn_fd_);
         ::close(conn_fd_);
+        conn_fd_ = -1;
         closed_ = true;
     }
 }
