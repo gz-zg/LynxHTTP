@@ -1,6 +1,8 @@
 #include "LynxHTTP/TcpConn.hpp"
+#include <cerrno>
 #include <cstdint>
 #include <sys/epoll.h>
+#include <sys/socket.h>
 #include <unistd.h>
 
 TcpConn::TcpConn(int conn_fd, EventLoop& evloop)
@@ -15,6 +17,11 @@ TcpConn::~TcpConn()
     close();
 }  
 
+void TcpConn::set_read_cb(std::function<void()> read_cb)
+{
+    read_cb_ = read_cb;
+}
+
 void TcpConn::handle_io(uint32_t events)
 {
     if(events & EPOLLIN)
@@ -27,12 +34,30 @@ void TcpConn::handle_io(uint32_t events)
 
 void TcpConn::handle_read()
 {
-
+    int err = 0;
+    int n = input_buffer_.recv(conn_fd_, &err);
+    if(n > 0)
+    {
+        if(read_cb_)
+            read_cb_();
+    }
+    else if(n == 0 || (n < 0 && err != EAGAIN && err != EWOULDBLOCK)) // 这是什么情况?
+    {
+        close();
+    }
 }
 
 void TcpConn::handle_write()
 {
-    
+    int n = ::send(conn_fd_, output_buffer_.data(), output_buffer_.size(), MSG_NOSIGNAL);
+    if(n > 0)
+    {
+        output_buffer_.erase(0, n);
+    }
+    else if(n < 0 && errno != EAGAIN && errno != EWOULDBLOCK) // 这是什么情况?
+    {
+        close();
+    }
 }
 
 void TcpConn::close()

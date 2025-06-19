@@ -1,23 +1,31 @@
 #pragma once
 
 #include "LynxHTTP/EventLoop.hpp"
-#include <cstdint>
-#include <sys/epoll.h>
+#include "LynxHTTP/MessageBuffer.hpp"
 #include <functional>
-#include <unistd.h>
+#include <string>
 
 class TcpConn {
 public:
     TcpConn(int conn_fd, EventLoop& evloop);  
     ~TcpConn();
 
+    void set_read_cb(std::function<void()> read_cb);
+
 private:
     bool closed_;
     int conn_fd_;
     EventLoop& evloop_;
+
     std::function<void(uint32_t)> io_handler_;
     void handle_io(uint32_t events);
+    
     void handle_read();
+    MessageBuffer input_buffer_;
+    std::function<void()> read_cb_;
+    
     void handle_write();
+    std::string output_buffer_;
+    
     void close();
 };
