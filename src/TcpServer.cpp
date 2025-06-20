@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include "LynxHTTP/InetAddress.hpp"
 #include <iostream>
-#include "LynxHTTP/TcpConn.hpp"
 
 // 创建一个 TCP + IPv4 的套接字 listen_fd_
 TcpServer::TcpServer()
@@ -70,6 +69,8 @@ void TcpServer::handle_accept(uint32_t events)
 
         // 创建 TcpConn 对象
         auto conn = std::make_shared<TcpConn>(conn_fd, evloop_);
+        if(new_conn_cb_)
+            new_conn_cb_(conn);
     }
     else 
     {

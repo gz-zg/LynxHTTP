@@ -1,5 +1,4 @@
 #include "LynxHTTP/MessageBuffer.hpp"
-#include <bits/types/struct_iovec.h>
 #include <sys/uio.h>
 #include <cstring>
 #include <cerrno>
