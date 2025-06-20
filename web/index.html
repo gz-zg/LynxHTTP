@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gz_zg 的个人主页</title>
+    <style>
+        :root {
+            --primary: #1e90ff;
+            --background: #f4f7f9;
+            --text: #333;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        nav {
+            margin-top: 0.5rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+
+        section {
+            padding: 2rem;
+            max-width: 960px;
+            margin: auto;
+        }
+
+        section h2 {
+            border-left: 5px solid var(--primary);
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card {
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #eaeaea;
+            color: #777;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            nav a {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>gz_zg</h1>
+        <nav>
+            <a href="#about">关于我</a>
+            <a href="#projects">项目</a>
+            <a href="#contact">联系方式</a>
+        </nav>
+    </header>
+
+    <section id="about">
+        <h2>关于我</h2>
+        <div class="card">
+            <p>你好！我是 <strong>gz_zg</strong>，一名专注于后端开发的 C++ 软件工程师。目前正在开发一个模块化、高性能、轻量级的 HTTP 服务器 <code>LynxHTTP</code>，并对游戏开发和系统架构研究充满兴趣。</p>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2>我的项目</h2>
+        <div class="card">
+            <h3>LynxHTTP</h3>
+            <p>一个使用 C++ 编写的高性能 HTTP 服务器，采用事件驱动与模块化架构，支持多线程与高并发处理。</p>
+        </div>
+        <div class="card">
+            <h3>GameEngineX (规划中)</h3>
+            <p>基于 ECS 架构的游戏引擎原型设计，支持组件热插拔、跨平台渲染后端。</p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>联系方式</h2>
+        <div class="card">
+            <p>📧 邮箱：gz_zg@example.com</p>
+            <p>💼 GitHub：<a href="https://github.com/gz-zg" target="_blank">github.com/gz-zg</a></p>
+        </div>
+    </section>
+
+    <footer>
+        © 2025 gz_zg. 保留所有权利。
+    </footer>
+
+</body>
+</html>
