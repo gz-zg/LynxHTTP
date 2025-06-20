@@ -24,8 +24,10 @@ TcpServer::~TcpServer()
     }
 }
 
-void TcpServer::start(int port)
+void TcpServer::start(int port, std::function<void(std::shared_ptr<TcpConn>)> new_conn_cb)
 {
+    new_conn_cb_ = new_conn_cb;
+
     listen_fd_ = ::socket(AF_INET, SOCK_STREAM, 0);
     
     // 给 listen_fd_ 设置选项

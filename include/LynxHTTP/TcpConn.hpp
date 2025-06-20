@@ -2,6 +2,7 @@
 
 #include "LynxHTTP/EventLoop.hpp"
 #include "LynxHTTP/MessageBuffer.hpp"
+#include <cstddef>
 #include <functional>
 #include <string>
 
@@ -11,6 +12,9 @@ public:
     ~TcpConn();
 
     void set_read_cb(std::function<void()> read_cb);
+    std::string get_all_data();
+    std::string get_data_until_CRLF();
+    int send(const char* data, size_t size);
 
 private:
     bool closed_;

@@ -22,6 +22,26 @@ void TcpConn::set_read_cb(std::function<void()> read_cb)
     read_cb_ = read_cb;
 }
 
+std::string TcpConn::get_all_data()
+{
+    auto data = input_buffer_.get_all_data();
+    std::string result((char*)data.first, data.second);
+    return result;
+}
+
+std::string TcpConn::get_data_until_CRLF()
+{
+    auto data = input_buffer_.get_data_until_CRLF();
+    std::string result((char*)data.first, data.second);
+    return result;
+}
+
+int TcpConn::send(const char* data, size_t size)
+{
+    output_buffer_.append(data, size);
+    return size;
+}
+
 void TcpConn::handle_io(uint32_t events)
 {
     if(events & EPOLLIN)
