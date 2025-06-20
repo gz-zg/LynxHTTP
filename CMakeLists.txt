@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON) # 要求强制使用所设定的标准，不
 set(CMAKE_CXX_EXTENSIONS OFF)       # 是否允许编译器特有的扩展，设为 OFF 更可移植
 
 # 定义所有静态库的名称
-set(libs EventLoop http InetAddress TcpConn TcpServer)
+set(libs EventLoop MessageBuffer http InetAddress TcpConn TcpServer)
 
 # 循环创建所有静态库
 foreach(lib IN LISTS libs)
@@ -19,11 +19,17 @@ foreach(lib IN LISTS libs)
     target_include_directories(${lib} PUBLIC include)
 endforeach()
 
+# TcpConn
+target_link_libraries(TcpConn PUBLIC EventLoop MessageBuffer)
+
+# TcpServer
+target_link_libraries(TcpServer PUBLIC InetAddress TcpConn)
+
 # 创建main可执行文件
 add_executable(main main.cpp)
 
 # 给main可执行文件链接静态库
-target_link_libraries(main PRIVATE ${libs})
+target_link_libraries(main PRIVATE TcpServer)
 
 # tests-client 可执行文件
 add_executable(client tests/client.cpp)
