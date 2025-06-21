@@ -25,6 +25,7 @@ TcpServer::~TcpServer()
 
 void TcpServer::start(int port, std::function<void(std::shared_ptr<TcpConn>)> new_conn_cb)
 {
+    //设置新连接建立时执行的回调函数
     new_conn_cb_ = new_conn_cb;
 
     listen_fd_ = ::socket(AF_INET, SOCK_STREAM, 0);
@@ -37,7 +38,8 @@ void TcpServer::start(int port, std::function<void(std::shared_ptr<TcpConn>)> ne
     InetAddress addr(port);
     if(::bind(listen_fd_, addr.ptr_const(), addr.size()) < 0)
     {
-        // [失败处理]之后再写吧
+        std::cerr << "::bind error" << errno << std::endl;
+        return;
     }
     ::listen(listen_fd_, SOMAXCONN);
 
@@ -47,10 +49,10 @@ void TcpServer::start(int port, std::function<void(std::shared_ptr<TcpConn>)> ne
     // 将 listen_fd_ 添加到 事件循环 中
     evloop_.add_event(listen_fd_, EPOLLIN, &accept_handler_);
 
+    std::cout << "Server started on port: " << port << std::endl;
+    
     // 运行 evloop_ 这个事件循环
     evloop_.run();
-
-    std::cout << "Server started on port: " << port << std::endl;
 }
 
 void TcpServer::handle_accept(uint32_t events)

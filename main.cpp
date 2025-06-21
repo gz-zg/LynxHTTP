@@ -5,37 +5,18 @@
 
 int main() 
 {
-    std::cout << "Hello World!" << std::endl;
+    int cnt = 0;
     
     TcpServer server;
-    server.start(7777, [](std::shared_ptr<TcpConn> conn)->void {
-        std::cout << "成功建立了一个新的连接" << std::endl;
+    server.start(7777, [&cnt](std::shared_ptr<TcpConn> conn)->void {
+        std::cout << "成功建立了一个新的连接: " << cnt << std::endl;
+        cnt++;
     
         conn->set_read_cb([conn]()->void {
             std::cout << "Received: " << std::endl << conn->get_all_data() << std::endl;
-            // conn->send("HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello World!", 52);
-
-
-            // const std::string html_body =
-            //     "<!DOCTYPE html>\r\n"
-            //     "<html>\r\n"
-            //     "<head><title>Test Page</title></head>\r\n"
-            //     "<body><h1>Hello from LynxHTTP</h1></body>\r\n"
-            //     "</html>\r\n";
-        
-            // std::string response = 
-            //     "HTTP/1.1 200 OK\r\n"
-            //     "Content-Type: text/html; charset=UTF-8\r\n"
-            //     "Content-Length: " + std::to_string(html_body.size()) + "\r\n"
-            //     "Connection: close\r\n"
-            //     "\r\n" +
-            //     html_body;
-
-            // conn->send(response.data(), response.size());
-        
 
             // 1. 读取 HTML 文件内容
-            std::ifstream file("web/index.html", std::ios::in | std::ios::binary);
+            std::ifstream file("/root/LynxHTTP/web/index.html", std::ios::in | std::ios::binary);
             if (!file.is_open()) {
                 // 文件读取失败，返回 404
                 std::string not_found = 
