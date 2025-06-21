@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LynxHTTP Project Homepage</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 2rem;
+      background: #f4f4f4;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .section {
+      max-width: 900px;
+      width: 100%;
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 { color: #2c3e50; }
+    pre { background: #eee; padding: 1rem; overflow-x: auto; }
+    .chinese {
+      font-family: "Noto Sans SC", sans-serif;
+      margin-top: 2rem;
+      border-top: 2px dashed #ccc;
+      padding-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <div class="chinese">
+      <h1>LynxHTTP - 一个模块化、高性能、轻量级的 C++ HTTP 服务器</h1>
+      <p><strong>LynxHTTP</strong> 是一个基于事件驱动的现代 HTTP 服务器，使用 C++ 开发，具备高并发、模块化与低资源占用等特性。</p>
+      <h2>特性</h2>
+      <ul>
+        <li>模块化架构：可插拔式路由、中间件和处理器</li>
+        <li>高性能：非阻塞 I/O 与 Reactor 模式</li>
+        <li>轻量级：无外部依赖的纯 C++ 实现</li>
+        <li>线程池：扩展良好的任务处理模型</li>
+      </ul>
+      <h2>架构总览</h2>
+      <ul>
+        <li>核心模块：TcpServer, TcpConn, EventLoop, HttpParser, ModuleManager</li>
+        <li>并发模式：1 个 I/O 线程 + N 个工作线程</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

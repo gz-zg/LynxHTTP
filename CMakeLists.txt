@@ -29,7 +29,7 @@ target_link_libraries(TcpServer PUBLIC InetAddress TcpConn)
 add_executable(main main.cpp)
 
 # 给main可执行文件链接静态库
-target_link_libraries(main PRIVATE TcpServer)
+target_link_libraries(main PRIVATE TcpServer http)
 
 # tests-client 可执行文件
 add_executable(client tests/client.cpp)

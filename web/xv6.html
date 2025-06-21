@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LynxHTTP Project Homepage</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 2rem;
+      background: #f4f4f4;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .section {
+      max-width: 900px;
+      width: 100%;
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 { color: #2c3e50; }
+    pre { background: #eee; padding: 1rem; overflow-x: auto; }
+    .chinese {
+      font-family: "Noto Sans SC", sans-serif;
+      margin-top: 2rem;
+      border-top: 2px dashed #ccc;
+      padding-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <div class="chinese">
+      <h1>xv6 研究笔记 - 操作系统探索实践</h1>
+      <p>本项目记录了 MIT 教学操作系统 xv6 的实验结果、源码分析与机制理解，聚焦于内核进程管理与内存系统研究。</p>
+      <h2>当前研究重点</h2>
+      <ul>
+        <li>进程生命周期：fork/exec/exit</li>
+        <li>中断与陷阱：用户态与内核态切换机制</li>
+        <li>虚拟内存：地址空间结构与页表</li>
+      </ul>
+      <h2>使用工具与流程</h2>
+      <ul>
+        <li>QEMU 虚拟机环境</li>
+        <li>VSCode 远程调试插件</li>
+        <li>Git + Markdown 编写笔记</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
