@@ -88,5 +88,6 @@ void TcpConn::close()
         ::close(conn_fd_);
         conn_fd_ = -1;
         closed_ = true;
+        read_cb_ = nullptr; // 显式销毁Lambda,使管理当前TcpConn对象的shared_ptr的引用计数-1
     }
 }
